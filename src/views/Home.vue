@@ -1,17 +1,33 @@
 <template>
   <div class="home">
-    Home
+    <h1>Home</h1>
+    <p ref="p">My name is {{ name }} and my age is {{ age }}</p>
+    <button @click="handleClick">click me</button>
   </div>
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
 // @ is an alias to /src
 
 
 export default {
   name: 'Home',
   setup(){
-    
+
+    const p = ref(null)
+
+    let name = 'faraz'
+    let age = 23
+
+    const handleClick = () => {
+      console.log(p, p.value)
+      p.value.classList.add('test')
+    }
+
+    return {
+      name, age, handleClick, p
+    }
   }
 }
 </script>
