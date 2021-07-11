@@ -4,6 +4,7 @@
 
     <input type="text" v-model="search">
     <p>search term - {{ search }}</p>
+    <button @click="handleClick">Stop watch</button>
     <div v-for="name in matchingNames" :key="name">{{ name }}</div>
     <!-- <h2>Refs</h2>
     <p>{{ ninjaOne.name }} - {{ ninjaOne.age }}</p>
@@ -17,7 +18,8 @@
 
 <script>
 import { ref, reactive } from '@vue/reactivity'
-import { computed } from '@vue/runtime-core'
+import { computed, watchEffect } from '@vue/runtime-core'
+import {watch} from 'vue'
 // @ is an alias to /src
 
 
@@ -28,11 +30,24 @@ export default {
     const search = ref('')
     const names = ref(['faraz', 'mujtaba', 'rafay', 'muaz', 'rasheed', 'amil', 'haseeb', 'raza'])
 
+    const stopWatch = watch(search, () => {
+      console.log('watch has ran')
+    })
+
+    const stopEffect = watchEffect(() => {
+      console.log('watchEffect has ran', search.value)
+    })
+
     const matchingNames = computed(() => {
       return names.value.filter((name) => name.includes(search.value))
     })
 
-    return {names, search, matchingNames}
+    const handleClick = () => {
+      stopWatch()
+      stopEffect()
+    }
+
+    return {names, search, matchingNames, handleClick}
 
     // const ninjaOne = ref({name: 'faraz', age: 23})
     // const ninjaTwo = reactive({name: 'Kounpal', age: 23})
