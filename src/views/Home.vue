@@ -5,7 +5,9 @@
     <div v-if="posts.length">
       <PostList :posts="posts" />
     </div>
-    <div v-else>loading...</div>
+    <div v-else>
+      <Spinner />
+    </div>
 
     <!-- <PostList v-if="showPosts" :posts="posts" />
     <button @click="showPosts = !showPosts">Toggle Posts</button>
@@ -29,6 +31,8 @@
 <script>
 import PostList from '../components/PostList.vue'
 import getPosts from '../composables/getPosts'
+import Spinner from '../components/Spinner.vue'
+
 // import { ref, reactive } from '@vue/reactivity'
 // import { computed, watchEffect } from '@vue/runtime-core'
 // import {watch} from 'vue'
@@ -37,13 +41,13 @@ import getPosts from '../composables/getPosts'
 
 export default {
   name: 'Home',
-  components: { PostList },
+  components: { PostList, Spinner },
   setup(){
 
     const { posts, error, load} = getPosts()
 
     load()
-    
+
     return { posts, error }
 
 
