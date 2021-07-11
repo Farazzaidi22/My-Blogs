@@ -1,9 +1,16 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostList v-if="showPosts" :posts="posts" />
+    <div v-if="error">{{ error }}</div>
+    <div v-if="posts.length">
+      <PostList :posts="posts" />
+    </div>
+    <div v-else>loading...</div>
+
+    <!-- <PostList v-if="showPosts" :posts="posts" />
     <button @click="showPosts = !showPosts">Toggle Posts</button>
-    <button @click="posts.pop()">Delete post</button>
+    <button @click="posts.pop()">Delete post</button> -->
+
     <!-- <input type="text" v-model="search">
     <p>search term - {{ search }}</p>
     <button @click="handleClick">Stop watch</button>
@@ -32,15 +39,29 @@ export default {
   components: { PostList },
   setup(){
 
-    const posts =ref([
-      { title: 'welcome to the blog', body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi fugiat quos impedit corporis mollitia neque corrupti sunt nesciunt, voluptates, quia exercitationem omnis explicabo soluta a est harum iste quam obcaecati. Ipsam vitae velit ea natus magni optio autem labore. Sapiente, cupiditate adipisci consequuntur officia sed exercitationem repellendus error aut pariatur voluptas reprehenderit et minus nulla corrupti nam corporis. Dolore, quod.Atque iusto laborum quis accusamus, magnam labore quia saepe ex perferendis. Enim ad quod asperiores aliquid corporis cupiditate adipisci exercitationem itaque commodi voluptas delectus eius consequuntur non molestiae, officia aperiam.Tempora, quis expedita provident voluptatibus animi deleniti ex illum quidem aliquid quas, minima impedit magnam odit officia et accusamus maiores excepturi soluta quo eveniet! Assumenda eveniet numquam beatae quidem ipsa?Consequuntur error necessitatibus laborum suscipit ipsa nam, dolore voluptatem est aliquam assumenda et dolorem, alias eum sunt magni quisquam? Vero, mollitia. Odio veritatis quo eveniet, error eum doloribus. Maxime, beatae.Placeat iste laborum hic non illo atque temporibus facere tempore fugit voluptatibus! Accusantium, in perferendis nam eos, minus facilis inventore placeat explicabo numquam, aut itaque aliquam? Odio laborum eius ex.Nulla qui, error sint in magni ab magnam ea doloremque, autem voluptatum quisquam a saepe sit nobis deleniti voluptatem. Animi harum nam, voluptas ut nesciunt consequuntur reiciendis commodi doloribus iusto?Beatae, doloremque placeat in illo eveniet nisi ipsa quisquam nostrum blanditiis sequi veniam a, reprehenderit optio dolor quaerat porro minima ex maiores voluptatum esse impedit molestias consequatur nulla. Aut, laborum!Modi quisquam repudiandae corrupti harum vel? Nostrum modi quae est dicta sit labore sapiente tempora commodi harum quaerat odit pariatur enim, alias hic quibusdam mollitia totam amet rerum cumque accusantium?Eligendi culpa quaerat at eum temporibus itaque odit veniam repudiandae unde? Vero atque eaque assumenda minima! Quas sed commodi delectus consectetur quis, necessitatibus, numquam aliquam, consequuntur amet quia vel iste?', id: 1 },
-      { title: 'top 5 HTML CSS tips', body: 'lorem ipsum', id: 2 }
+    const posts =ref([])
+    const error = ref(null)
 
-    ])
+    const load = async () => {
+      try{
+        let data = await fetch('http://localhost:3000/posts')
+        if(!data.ok){
+          throw Error('no data available')
+        }
+        posts.value = await data.json()
+      }
+      catch(err){
+        error.value = err.message
+        console.log(error.value)
+      }
+    }
 
-    const showPosts = ref(true)
+    load()
 
-    return { posts, showPosts }
+    return { posts, error }
+
+
+    // const showPosts = ref(true)
 
     // const search = ref('')
     // const names = ref(['faraz', 'mujtaba', 'rafay', 'muaz', 'rasheed', 'amil', 'haseeb', 'raza'])
