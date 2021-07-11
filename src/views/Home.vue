@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostList :posts="posts" />
+    <PostList v-if="showPosts" :posts="posts" />
+    <button @click="showPosts = !showPosts">Toggle Posts</button>
+    <button @click="posts.pop()">Delete post</button>
     <!-- <input type="text" v-model="search">
     <p>search term - {{ search }}</p>
     <button @click="handleClick">Stop watch</button>
@@ -36,7 +38,9 @@ export default {
 
     ])
 
-    return { posts }
+    const showPosts = ref(true)
+
+    return { posts, showPosts }
 
     // const search = ref('')
     // const names = ref(['faraz', 'mujtaba', 'rafay', 'muaz', 'rasheed', 'amil', 'haseeb', 'raza'])
