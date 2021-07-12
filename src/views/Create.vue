@@ -1,6 +1,6 @@
 <template>
   <div class="create">
-      <form>
+      <form @submit.prevent="handleSubmit">
           <label>Title:</label>
           <input v-model="title" type="text" required>
 
@@ -21,8 +21,12 @@
 
 <script>
 import { ref } from '@vue/reactivity'
+import { useRouter } from 'vue-router'
+
 export default {
     setup(){
+        const router = useRouter()
+
         const title = ref('')
         const body = ref('')
         const tag = ref('')
@@ -36,7 +40,25 @@ export default {
             tag.value = ''
         }
 
-        return { title, body, tag, handleKeydown, tags}
+        const handleSubmit = async () => {
+            let post = {
+                title: title.value,
+                body: body.value,
+                tag: tags.value
+            }
+
+            await fetch('http://localhost:3000/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(post)
+            })
+            .then( () => {
+                router.push('/')
+            })
+            .catch((err) => console.log(err))
+        }
+
+        return { title, body, tag, handleKeydown, tags, handleSubmit}
     }
 
 }
